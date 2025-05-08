@@ -1,10 +1,15 @@
 import 'package:easy_splash_screen/easy_splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:usercraft/core/navigation/bottom_tabs.dart';
 import 'package:usercraft/core/provider/home_screen_provider.dart';
 
-void main() {
+import 'core/widgets/loader/easy_loading.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Easyloding.configLoading();
   runApp(const MainApp());
 }
 
@@ -20,6 +25,7 @@ class MainApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'User Craft',
+        builder: EasyLoading.init(),
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
             seedColor: Colors.black,

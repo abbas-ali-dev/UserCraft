@@ -13,7 +13,9 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Home Screen',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         actions: [
           IconButton(
@@ -30,10 +32,18 @@ class HomeScreen extends StatelessWidget {
       body: controller.isFetchData == false
           ? Center(
               child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.all(
+                    Color(0XFFffd21f),
+                  ),
+                  foregroundColor: WidgetStateProperty.all(
+                    Colors.black,
+                  ),
+                ),
                 onPressed: () async {
                   await controller.getApi();
                 },
-                child: Text('Hit me'),
+                child: Text('Fetch UserCraft Data'),
               ),
             )
           : ListView.builder(
