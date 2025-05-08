@@ -34,7 +34,7 @@ class MainApp extends StatelessWidget {
           logoWidth: 120,
           backgroundColor: Colors.black,
           loadingText: Text(
-            'Developed by Analytica...',
+            'Developed by Analytica...❤️\n\n',
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -44,7 +44,7 @@ class MainApp extends StatelessWidget {
             textDirection: TextDirection.ltr,
             textAlign: TextAlign.center,
           ),
-          durationInSeconds: 3,
+          durationInSeconds: 4,
           showLoader: true,
           loaderColor: Color(0XFFffd21f),
           navigator: BottomTabs(),

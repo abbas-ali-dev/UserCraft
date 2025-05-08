@@ -26,6 +26,17 @@ dependencies:
   # ui
   persistent_bottom_nav_bar: ^6.2.1
 
+  # launcher icons
+  flutter_launcher_icons: ^0.14.3
+
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"
+  adaptative_icon_background: "#000000"
+  adaptative_icon_foreground: "assets/icon/icon.png"
+
 
 dev_dependencies:
   flutter_test:
@@ -37,3 +48,4 @@ flutter:
 
   assets:
   - assets/images/
+  - assets/icon/
