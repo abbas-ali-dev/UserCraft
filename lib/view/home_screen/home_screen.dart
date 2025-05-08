@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:usercraft/core/provider/home_screen_provider.dart';
+import 'package:usercraft/view/user_detail/user_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -109,7 +110,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 margin: EdgeInsets.symmetric(horizontal: 15, vertical: 18),
                 elevation: 4,
                 child: ListTile(
-                  minVerticalPadding: 20,
                   contentPadding: EdgeInsets.all(8),
                   leading: CircleAvatar(
                     radius: 30,
@@ -131,6 +131,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   subtitle: Text(user.email ?? ''),
                   trailing: Icon(Icons.arrow_forward_ios, size: 16),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UserDetailScreen(user: user),
+                      ),
+                    );
+                  },
                 ),
               );
             },

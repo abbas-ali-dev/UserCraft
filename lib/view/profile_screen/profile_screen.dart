@@ -34,42 +34,44 @@ class ProfileScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
-                height: 160,
-                width: 160,
-                child: CircleAvatar(
-                  radius: 100,
-                  backgroundColor: Color(0XFFffd21f),
-                  child: consumer.userModel?.data?.avatar != null &&
-                          consumer.userModel!.data!.avatar
-                              .toString()
-                              .startsWith('http')
-                      ? ClipOval(
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                consumer.userModel!.data!.avatar.toString(),
-                            fit: BoxFit.cover,
-                            width: 180,
-                            height: 180,
-                            placeholder: (context, url) =>
-                                CircularProgressIndicator(
-                              color: Colors.black,
-                            ),
-                            errorWidget: (context, url, error) => Image.asset(
-                              'assets/images/profile_boy.png',
-                              fit: BoxFit.cover,
-                              width: 180,
-                              height: 180,
-                            ),
-                          ),
-                        )
-                      : Image.asset(
-                          'assets/images/profile_boy.png',
+              Container(
+                height: 150,
+                width: 150,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Color(0XFFffd21f),
+                    width: 5,
+                  ),
+                ),
+                child: consumer.userModel?.data?.avatar != null &&
+                        consumer.userModel!.data!.avatar
+                            .toString()
+                            .startsWith('http')
+                    ? ClipOval(
+                        child: CachedNetworkImage(
+                          imageUrl: consumer.userModel!.data!.avatar.toString(),
                           fit: BoxFit.cover,
                           width: 180,
                           height: 180,
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(
+                            color: Colors.black,
+                          ),
+                          errorWidget: (context, url, error) => Image.asset(
+                            'assets/images/profile_boy.png',
+                            fit: BoxFit.cover,
+                            width: 180,
+                            height: 180,
+                          ),
                         ),
-                ),
+                      )
+                    : Image.asset(
+                        'assets/images/profile_boy.png',
+                        fit: BoxFit.cover,
+                        width: 180,
+                        height: 180,
+                      ),
               ),
               SizedBox(height: 10),
               RichText(
