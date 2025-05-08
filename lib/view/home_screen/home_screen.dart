@@ -51,11 +51,12 @@ class HomeScreen extends StatelessWidget {
               physics: BouncingScrollPhysics(),
               itemCount: controller.responceModel.length,
               itemBuilder: (context, index) {
-                final data = controller.responceModel[index];
+                final data = controller.responceDatum[index];
                 return ListTile(
-                  leading: Text(data.userId.toString()),
-                  title: Text(data.title.toString()),
-                  subtitle: Text(data.body.toString()),
+                  leading: Text(data.avatar.toString()),
+                  title: Text(
+                      '${data.firstName.toString()} ${data.lastName.toString()}'),
+                  subtitle: Text(data.email.toString()),
                 );
               },
             ),

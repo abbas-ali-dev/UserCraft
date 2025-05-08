@@ -25,6 +25,9 @@ dependencies:
   # storage
   get_storage: ^2.1.1
 
+  # network image
+  cached_network_image: ^3.4.1
+
   # ui
   persistent_bottom_nav_bar: ^6.2.1
 

@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:usercraft/core/navigation/bottom_tabs.dart';
 import 'package:usercraft/core/provider/home_screen_provider.dart';
+import 'package:usercraft/core/provider/profile_screen_provider.dart';
 
 import 'core/widgets/loader/easy_loading.dart';
 
@@ -21,6 +22,7 @@ class MainApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => HomeScreenProvider()),
+        ChangeNotifierProvider(create: (_) => ProfileScreenProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

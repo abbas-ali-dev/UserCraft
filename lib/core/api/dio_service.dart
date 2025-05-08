@@ -1,21 +1,12 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:usercraft/core/api/end_points.dart';
 import 'package:usercraft/core/utils/storage_conts.dart';
-import 'package:usercraft/model/responce_model.dart';
-
+import 'package:usercraft/model/user_model.dart';
 import 'dio_prety.dart';
-
-// ================================ is function ko call krna h ================================
-// final response = await NetworkManager().callApi(
-//         urlEndPoint: ApiConstants.forgotPassword,            // api url
-//         method: HttpMethod.Post,                             // api method
-//         body: body,                                          //  api body
-//       );
 
 class AppConfig {}
 
@@ -191,8 +182,7 @@ class NetworkManager {
 
       if (response?.statusCode == 200) {
         if (method == HttpMethod.Post || method == HttpMethod.Put) {
-          final ResponceModel baseModel =
-              ResponceModel.fromJson(response!.data);
+          final UserModel baseModel = UserModel.fromJson(response!.data);
           // if (baseModel.message != null) {
           //   Fluttertoast.showToast(
           //     msg: baseModel.message.toString(),

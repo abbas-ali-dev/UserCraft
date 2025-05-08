@@ -7,8 +7,8 @@ class Toaster {
       msg: message,
       timeInSecForIosWeb: 3,
       toastLength: Toast.LENGTH_LONG,
-      textColor: Colors.white,
-      gravity: ToastGravity.TOP,
+      textColor: Colors.black,
+      gravity: ToastGravity.CENTER,
       backgroundColor: Color(0XFFffd21f),
       // webBgColor: Color(0XFF7DBD2C),
     );

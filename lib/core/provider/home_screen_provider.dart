@@ -3,18 +3,19 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:usercraft/core/api/dio_service.dart';
 import 'package:usercraft/core/api/end_points.dart';
 import 'package:usercraft/core/widgets/toaster/toaster.dart';
-import 'package:usercraft/model/responce_model.dart';
+import 'package:usercraft/model/list_model.dart';
 
 class HomeScreenProvider extends ChangeNotifier {
   bool isFetchData = false;
-  List<ResponceModel> responceModel = <ResponceModel>[];
+  List<ListModel> responceModel = <ListModel>[];
+  List<Datum> responceDatum = <Datum>[];
 
   Future<void> getApi() async {
     isFetchData = true;
     EasyLoading.show();
     try {
       final response = await NetworkManager().callApi(
-        urlEndPoint: EndPoints.mainCall,
+        urlEndPoint: EndPoints.listUsers,
         method: HttpMethod.Get,
       );
 
@@ -23,14 +24,19 @@ class HomeScreenProvider extends ChangeNotifier {
         final List<dynamic> dataList = response.data;
 
         responceModel = dataList
-            .map((item) => ResponceModel.fromJson(item as Map<String, dynamic>))
+            .map((item) => ListModel.fromJson(item as Map<String, dynamic>))
             .toList();
+        responceDatum = responceModel
+            .map((data) => Datum.fromJson(data as Map<String, dynamic>))
+            .toList();
+      } else {
+        Toaster.showToast('Something Went Wrong');
       }
 
       EasyLoading.dismiss();
     } catch (e) {
       EasyLoading.dismiss();
-      Toaster.showToast('Something Went Wrong');
+      Toaster.showToast('Something Went Wrong $e');
     }
     notifyListeners();
   }
