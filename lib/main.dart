@@ -1,10 +1,8 @@
 import 'package:easy_splash_screen/easy_splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:usercraft/core/provider/main_screen_provider.dart';
-
-import 'view/main_screen.dart';
+import 'package:usercraft/core/navigation/bottom_tabs.dart';
+import 'package:usercraft/core/provider/home_screen_provider.dart';
 
 void main() {
   runApp(const MainApp());
@@ -17,7 +15,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => MainScreenProvider()),
+        ChangeNotifierProvider(create: (_) => HomeScreenProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -30,7 +28,7 @@ class MainApp extends StatelessWidget {
         ),
         home: EasySplashScreen(
           logo: Image.asset(
-            "assets/images/quiz_logo.jpg",
+            "assets/images/logo.png",
             fit: BoxFit.fill,
           ),
           logoWidth: 80,
@@ -46,17 +44,18 @@ class MainApp extends StatelessWidget {
           showLoader: true,
           loaderColor: Colors.white,
           loadingText: Text(
-            'Loading...',
+            'Developed by Analytica...',
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                fontFamily: 'Courier'),
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'Courier',
+            ),
             textDirection: TextDirection.ltr,
             textAlign: TextAlign.center,
           ),
           durationInSeconds: 3,
-          navigator: MainScreen(),
+          navigator: BottomTabs(),
         ),
       ),
     );

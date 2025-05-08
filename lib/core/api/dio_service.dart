@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:usercraft/core/api/end_points.dart';
-import 'package:usercraft/core/api/storage_conts.dart';
+import 'package:usercraft/core/utils/storage_conts.dart';
 import 'package:usercraft/model/responce_model.dart';
 
 import 'dio_prety.dart';

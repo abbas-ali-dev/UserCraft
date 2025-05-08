@@ -3,7 +3,7 @@ import 'package:usercraft/core/api/dio_service.dart';
 import 'package:usercraft/core/api/end_points.dart';
 import 'package:usercraft/model/responce_model.dart';
 
-class MainScreenProvider extends ChangeNotifier {
+class HomeScreenProvider extends ChangeNotifier {
   bool isFetchData = false;
   List<ResponceModel> responceModel = <ResponceModel>[];
 
