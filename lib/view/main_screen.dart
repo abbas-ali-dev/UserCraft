@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import '../controller/main_screen_controller.dart';
+import 'package:provider/provider.dart';
+import 'package:usercraft/core/provider/main_screen_provider.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final MainScreenController controller = MainScreenController();
+    final controller = Provider.of<MainScreenProvider>(context, listen: true);
     return Scaffold(
-      body: Obx(() => controller.isFetchData.value == false
+      body: controller.isFetchData == false
           ? Center(
               child: ElevatedButton(
                 onPressed: () async {
@@ -30,7 +29,8 @@ class MainScreen extends StatelessWidget {
                   title: Text(data.title.toString()),
                   subtitle: Text(data.body.toString()),
                 );
-              })),
+              },
+            ),
     );
   }
 }
