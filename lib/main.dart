@@ -31,18 +31,8 @@ class MainApp extends StatelessWidget {
             "assets/images/logo.png",
             fit: BoxFit.fill,
           ),
-          logoWidth: 80,
-          title: Text(
-            'User Craft',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          backgroundColor: Color(0XFFffd21f),
-          showLoader: true,
-          loaderColor: Colors.white,
+          logoWidth: 120,
+          backgroundColor: Colors.black,
           loadingText: Text(
             'Developed by Analytica...',
             style: TextStyle(
@@ -55,6 +45,8 @@ class MainApp extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           durationInSeconds: 3,
+          showLoader: true,
+          loaderColor: Color(0XFFffd21f),
           navigator: BottomTabs(),
         ),
       ),
