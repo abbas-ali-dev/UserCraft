@@ -22,7 +22,8 @@ class MainApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => HomeScreenProvider()),
-        ChangeNotifierProvider(create: (_) => ProfileScreenProvider()),
+        ChangeNotifierProvider(
+            create: (_) => ProfileScreenProvider()..fetchProfile()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

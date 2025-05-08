@@ -3,25 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:usercraft/core/provider/profile_screen_provider.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
-
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
-  @override
-  void initState() {
-    super.initState();
-    loadData();
-  }
-
-  Future<void> loadData() async {
-    final controller =
-        Provider.of<ProfileScreenProvider>(context, listen: false);
-    await controller.fetchProfile();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +20,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body:
           Consumer<ProfileScreenProvider>(builder: (context, consumer, child) {
+        if (consumer.isLoading) {
+          return Center(
+            child: CircularProgressIndicator(
+              color: Color(0XFFffd21f),
+            ),
+          );
+        }
         return SizedBox(
           width: MediaQuery.sizeOf(context).width,
           height: MediaQuery.sizeOf(context).height,

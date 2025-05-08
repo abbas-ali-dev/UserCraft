@@ -6,6 +6,8 @@ import 'package:usercraft/model/user_model.dart';
 
 class ProfileScreenProvider extends ChangeNotifier {
   UserModel? userModel;
+  bool isLoading = true;
+
   Future<void> fetchProfile() async {
     try {
       final response = await NetworkManager().callApi(
@@ -20,7 +22,9 @@ class ProfileScreenProvider extends ChangeNotifier {
       }
     } catch (e) {
       Toaster.showToast('Something Went Wrong $e');
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
-    notifyListeners();
   }
 }
