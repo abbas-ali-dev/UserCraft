@@ -1,3 +1,3 @@
-# jason_testing_app
+# User Explorer App using REST API
 
 A new Flutter project.
