@@ -2,7 +2,7 @@ import 'package:easy_splash_screen/easy_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
-import 'package:usercraft/core/navigation/bottom_tabs.dart';
+import 'package:usercraft/core/bottom_nav/bottom_tabs.dart';
 import 'package:usercraft/core/provider/home_screen_provider.dart';
 import 'package:usercraft/core/provider/profile_screen_provider.dart';
 

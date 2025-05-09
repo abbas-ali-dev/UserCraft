@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:usercraft/core/widgets/custom_widgets/custom_widgets.dart';
+import 'package:usercraft/core/widgets/custom_widgets/custom_detail_row.dart';
 import 'package:usercraft/core/widgets/toaster/toaster.dart';
 import 'package:usercraft/model/list_model.dart';
 

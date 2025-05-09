@@ -10,7 +10,6 @@ class Toaster {
       textColor: Colors.black,
       gravity: ToastGravity.CENTER,
       backgroundColor: Color(0XFFffd21f),
-      // webBgColor: Color(0XFF7DBD2C),
     );
   }
 }

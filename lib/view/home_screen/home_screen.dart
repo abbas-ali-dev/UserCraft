@@ -1,7 +1,10 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:usercraft/core/provider/home_screen_provider.dart';
-import 'package:usercraft/view/user_detail/user_detail_screen.dart';
+import 'package:usercraft/core/widgets/custom_widgets/custom_user_list.dart';
+import 'package:usercraft/core/widgets/custom_widgets/custom_sort_option.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,30 +14,57 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late ScrollController _scrollController;
+  final TextEditingController _searchController = TextEditingController();
+
+  final FocusNode _searchFocusNode = FocusNode();
+  bool _isSearchVisible = false;
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
-    _scrollController.addListener(_scrollListener);
+    final controller = Provider.of<HomeScreenProvider>(context, listen: false);
+    controller.scrollController = ScrollController();
+    controller.scrollController.addListener(_scrollListener);
   }
 
   @override
   void dispose() {
-    _scrollController.removeListener(_scrollListener);
-    _scrollController.dispose();
+    final controller = Provider.of<HomeScreenProvider>(context, listen: false);
+    controller.scrollController.removeListener(_scrollListener);
+    controller.scrollController.dispose();
+    _searchController.dispose();
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
+    final controller = Provider.of<HomeScreenProvider>(context, listen: false);
+    if (controller.scrollController.position.pixels >=
+        controller.scrollController.position.maxScrollExtent - 200) {
       final provider = Provider.of<HomeScreenProvider>(context, listen: false);
-      if (provider.hasMorePages && !provider.isLoadingMore) {
+      if (provider.hasMorePages &&
+          !provider.isLoadingMore &&
+          !provider.isSearching) {
         provider.loadNextPage();
       }
     }
+  }
+
+  void _toggleSearch() {
+    setState(() {
+      _isSearchVisible = !_isSearchVisible;
+      if (!_isSearchVisible) {
+        _searchController.clear();
+        Provider.of<HomeScreenProvider>(context, listen: false).clearSearch();
+      } else {
+        _searchFocusNode.requestFocus();
+      }
+    });
+  }
+
+  void _clearSearch() {
+    _searchController.clear();
+    Provider.of<HomeScreenProvider>(context, listen: false).clearSearch();
   }
 
   @override
@@ -48,102 +78,183 @@ class _HomeScreenState extends State<HomeScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.search,
-              color: Colors.black,
-            ),
-          ),
-        ],
         centerTitle: true,
         backgroundColor: Color(0XFFffd21f),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.sort, color: Colors.black),
+            onPressed: () {
+              customSortOptions(context);
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              _isSearchVisible ? Icons.close : Icons.search,
+              color: Colors.black,
+            ),
+            onPressed: _toggleSearch,
+          ),
+        ],
       ),
-      body: Consumer<HomeScreenProvider>(
-        builder: (context, provider, child) {
-          if (provider.isLoading) {
-            return Center(
-              child: CircularProgressIndicator(
-                color: Color(0XFFffd21f),
-              ),
-            );
-          }
-
-          if (!provider.isFetchData) {
-            return Center(
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(
-                    Color(0XFFffd21f),
+      body: Column(
+        children: [
+          if (_isSearchVisible)
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 1,
+                          blurRadius: 5,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                      border: Border.all(
+                        color: Color(0XFFffd21f),
+                        width: 2,
+                      ),
+                    ),
+                    child: TextField(
+                      controller: _searchController,
+                      focusNode: _searchFocusNode,
+                      decoration: InputDecoration(
+                        hintText: 'Search by name or email...',
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: Color(0XFFffd21f),
+                        ),
+                        suffixIcon: _searchController.text.isNotEmpty
+                            ? IconButton(
+                                icon: Icon(
+                                  Icons.clear,
+                                  color: Color(0XFFffd21f),
+                                ),
+                                onPressed: _clearSearch,
+                              )
+                            : null,
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 14,
+                        ),
+                      ),
+                      onChanged: (value) {
+                        setState(() {});
+                        Provider.of<HomeScreenProvider>(context, listen: false)
+                            .filterUsers(value);
+                      },
+                    ),
                   ),
-                  foregroundColor: WidgetStateProperty.all(
-                    Colors.black,
-                  ),
-                ),
-                onPressed: () async {
-                  await provider.getApi();
-                },
-                child: Text('Fetch UserCraft Data'),
+                ],
               ),
-            );
-          }
-
-          return ListView.builder(
-            controller: _scrollController,
-            physics: BouncingScrollPhysics(),
-            itemCount: provider.users.length + (provider.isLoadingMore ? 1 : 0),
-            itemBuilder: (context, index) {
-              if (index == provider.users.length) {
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+            ),
+          Expanded(
+            child: Consumer<HomeScreenProvider>(
+              builder: (context, provider, child) {
+                if (provider.isLoading) {
+                  return Center(
                     child: CircularProgressIndicator(
                       color: Color(0XFFffd21f),
                     ),
-                  ),
-                );
-              }
+                  );
+                }
 
-              final user = provider.users[index];
-              return Card(
-                margin: EdgeInsets.symmetric(horizontal: 15, vertical: 18),
-                elevation: 4,
-                child: ListTile(
-                  contentPadding: EdgeInsets.all(8),
-                  leading: CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Color(0XFFffd21f),
-                    child: ClipOval(
-                      child: Image.network(
-                        user.avatar ?? '',
-                        width: 60,
-                        height: 60,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) =>
-                            Icon(Icons.person, size: 30),
+                if (!provider.isFetchData) {
+                  return Center(
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all(
+                          Color(0XFFffd21f),
+                        ),
+                        foregroundColor: WidgetStateProperty.all(
+                          Colors.black,
+                        ),
                       ),
+                      onPressed: () async {
+                        await provider.getApi();
+                      },
+                      child: Text('Fetch UserCraft Data'),
                     ),
-                  ),
-                  title: Text(
-                    '${user.firstName} ${user.lastName}',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(user.email ?? ''),
-                  trailing: Icon(Icons.arrow_forward_ios, size: 16),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => UserDetailScreen(user: user),
+                  );
+                }
+
+                if (provider.isSearching) {
+                  return Column(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        color: Colors.grey[200],
+                        child: Text(
+                          'Found ${provider.searchResultsCount} results',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
                       ),
-                    );
-                  },
-                ),
-              );
-            },
-          );
-        },
+                      if (provider.filteredUsers.isEmpty)
+                        Expanded(
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.search_off,
+                                  size: 80,
+                                  color: Colors.grey,
+                                ),
+                                SizedBox(height: 16),
+                                Text(
+                                  'No results found for "${provider.searchQuery}"',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.grey[700],
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                SizedBox(height: 24),
+                                ElevatedButton.icon(
+                                  onPressed: _clearSearch,
+                                  icon: Icon(Icons.refresh),
+                                  label: Text('Clear Search'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Color(0XFFffd21f),
+                                    foregroundColor: Colors.black,
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                      vertical: 12,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      else
+                        Expanded(
+                          child: customUserList(provider, context),
+                        ),
+                    ],
+                  );
+                }
+
+                return RefreshIndicator(
+                  onRefresh: provider.refreshData,
+                  color: Color(0XFFffd21f),
+                  child: customUserList(provider, context),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
