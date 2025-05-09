@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:usercraft/core/bottom_nav/bottom_tabs.dart';
-import 'package:usercraft/core/provider/home_screen_provider.dart';
-import 'package:usercraft/core/provider/profile_screen_provider.dart';
+import 'package:usercraft/provider/home_screen_provider.dart';
+import 'package:usercraft/provider/profile_screen_provider.dart';
 
-import 'core/widgets/loader/easy_loading.dart';
+import 'widgets/loader/easy_loading.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

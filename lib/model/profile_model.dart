@@ -1,19 +1,22 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 
-UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
+ProfileModel ProfileModelFromJson(String str) =>
+    ProfileModel.fromJson(json.decode(str));
 
-String userModelToJson(UserModel data) => json.encode(data.toJson());
+String ProfileModelToJson(ProfileModel data) => json.encode(data.toJson());
 
-class UserModel {
+class ProfileModel {
   Data? data;
   Support? support;
 
-  UserModel({
+  ProfileModel({
     this.data,
     this.support,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
+  factory ProfileModel.fromJson(Map<String, dynamic> json) => ProfileModel(
         data: Data.fromJson(json["data"]),
         support: Support.fromJson(json["support"]),
       );

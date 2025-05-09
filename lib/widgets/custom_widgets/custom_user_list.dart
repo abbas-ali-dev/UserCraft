@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:usercraft/core/provider/home_screen_provider.dart';
+import 'package:usercraft/provider/home_screen_provider.dart';
 import 'package:usercraft/view/user_detail/user_detail_screen.dart';
 
 Widget customUserList(HomeScreenProvider provider, BuildContext context) {

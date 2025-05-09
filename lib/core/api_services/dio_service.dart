@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:usercraft/core/api/end_points.dart';
+import 'package:usercraft/core/api_services/end_points.dart';
 import 'dio_prety.dart';
 
 // ignore: constant_identifier_names

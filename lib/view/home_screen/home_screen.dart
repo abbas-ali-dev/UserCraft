@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:usercraft/core/provider/home_screen_provider.dart';
-import 'package:usercraft/core/widgets/custom_widgets/custom_user_list.dart';
-import 'package:usercraft/core/widgets/custom_widgets/custom_sort_option.dart';
+import 'package:usercraft/provider/home_screen_provider.dart';
+import 'package:usercraft/widgets/custom_widgets/custom_user_list.dart';
+import 'package:usercraft/widgets/custom_widgets/custom_sort_option.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -165,6 +165,47 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
 
+                if (provider.hasError) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.error_outline,
+                          size: 80,
+                          color: Colors.red,
+                        ),
+                        SizedBox(height: 16),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                          child: Text(
+                            provider.errorMessage,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.red[700],
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        SizedBox(height: 24),
+                        ElevatedButton.icon(
+                          onPressed: () => provider.retryConnection(),
+                          icon: Icon(Icons.refresh),
+                          label: Text('Retry'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0XFFffd21f),
+                            foregroundColor: Colors.black,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 12,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
                 if (!provider.isFetchData) {
                   return Center(
                     child: ElevatedButton(
@@ -223,7 +264,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(height: 24),
                                 ElevatedButton.icon(
                                   onPressed: _clearSearch,
-                                  icon: Icon(Icons.refresh),
+                                  icon: Icon(
+                                    Icons.refresh,
+                                    color: Colors.black,
+                                  ),
                                   label: Text('Clear Search'),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Color(0XFFffd21f),

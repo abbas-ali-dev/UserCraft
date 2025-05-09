@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:usercraft/core/api/dio_service.dart';
-import 'package:usercraft/core/api/end_points.dart';
-import 'package:usercraft/core/widgets/toaster/toaster.dart';
-import 'package:usercraft/model/user_model.dart';
+import 'package:usercraft/core/api_services/dio_service.dart';
+import 'package:usercraft/core/api_services/end_points.dart';
+import 'package:usercraft/widgets/toaster/toaster.dart';
+import 'package:usercraft/model/profile_model.dart';
 
 class ProfileScreenProvider extends ChangeNotifier {
-  UserModel? userModel;
+  ProfileModel? userModel;
   bool isLoading = true;
 
   Future<void> fetchProfile() async {
@@ -16,7 +16,7 @@ class ProfileScreenProvider extends ChangeNotifier {
       );
 
       if (response != null && response.statusCode == 200) {
-        userModel = UserModel.fromJson(response.data);
+        userModel = ProfileModel.fromJson(response.data);
       } else {
         Toaster.showToast('Something Went Wrong');
       }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:usercraft/core/api/dio_service.dart';
-import 'package:usercraft/core/widgets/toaster/toaster.dart';
+import 'package:usercraft/core/api_services/dio_service.dart';
+import 'package:usercraft/widgets/toaster/toaster.dart';
 import 'package:usercraft/model/list_model.dart';
 
 class HomeScreenProvider extends ChangeNotifier {
@@ -9,6 +9,9 @@ class HomeScreenProvider extends ChangeNotifier {
   bool isLoadingMore = false;
   bool isSearching = false;
   String searchQuery = '';
+
+  bool hasError = false;
+  String errorMessage = '';
 
   int currentPage = 1;
   int totalPages = 0;
@@ -24,6 +27,8 @@ class HomeScreenProvider extends ChangeNotifier {
   Future<void> getApi() async {
     isLoading = true;
     isFetchData = false;
+    hasError = false;
+    errorMessage = '';
     currentPage = 1;
     users = [];
     filteredUsers = [];
@@ -44,9 +49,14 @@ class HomeScreenProvider extends ChangeNotifier {
         isFetchData = true;
         Toaster.showToast('Data loaded successfully');
       } else {
-        Toaster.showToast('Failed to fetch data');
+        hasError = true;
+        errorMessage =
+            'Failed to fetch data. Server returned ${response?.statusCode}';
+        Toaster.showToast(errorMessage);
       }
     } catch (e) {
+      hasError = true;
+      errorMessage = 'Network error: ${e.toString()}';
       Toaster.showToast('Something went wrong: $e');
     } finally {
       isLoading = false;
@@ -83,10 +93,15 @@ class HomeScreenProvider extends ChangeNotifier {
         Toaster.showToast('Loaded page $currentPage of $totalPages');
       } else {
         currentPage--;
-        Toaster.showToast('Failed to load more data');
+        hasError = true;
+        errorMessage =
+            'Failed to load more data. Server returned ${response?.statusCode}';
+        Toaster.showToast(errorMessage);
       }
     } catch (e) {
       currentPage--;
+      hasError = true;
+      errorMessage = 'Network error while loading more data: ${e.toString()}';
       Toaster.showToast('Error loading more data: $e');
     } finally {
       isLoadingMore = false;
@@ -162,6 +177,13 @@ class HomeScreenProvider extends ChangeNotifier {
     } catch (e) {
       return null;
     }
+  }
+
+  Future<void> retryConnection() async {
+    hasError = false;
+    errorMessage = '';
+    notifyListeners();
+    await getApi();
   }
 
   bool get hasMorePages => currentPage < totalPages;

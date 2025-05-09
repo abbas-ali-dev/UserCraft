@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:usercraft/core/widgets/custom_widgets/custom_detail_row.dart';
-import 'package:usercraft/core/widgets/toaster/toaster.dart';
+import 'package:usercraft/widgets/custom_widgets/custom_detail_row.dart';
+import 'package:usercraft/widgets/toaster/toaster.dart';
 import 'package:usercraft/model/list_model.dart';
 
 class UserDetailScreen extends StatelessWidget {
@@ -49,7 +49,7 @@ class UserDetailScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 24),
+              SizedBox(height: 10),
               Text(
                 '${user?.firstName} ${user?.lastName}',
                 style: TextStyle(
@@ -58,7 +58,6 @@ class UserDetailScreen extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -99,7 +98,7 @@ class UserDetailScreen extends StatelessWidget {
                 onPressed: () {
                   Toaster.showToast('${user?.firstName} comming soon...');
                 },
-                icon: Icon(Icons.contact_mail),
+                icon: Icon(Icons.contact_mail, color: Colors.black),
                 label: Text('Contact User'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0XFFffd21f),
