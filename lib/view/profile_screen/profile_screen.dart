@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:usercraft/provider/profile_screen_provider.dart';
 
+/// ProfileScreen displays the user's profile information including their avatar,
+/// name, and email. It fetches data using the ProfileScreenProvider and displays
+/// a loading indicator while data is being loaded.
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
@@ -20,6 +23,7 @@ class ProfileScreen extends StatelessWidget {
       ),
       body:
           Consumer<ProfileScreenProvider>(builder: (context, consumer, child) {
+        // Display loading indicator while data is being fetched
         if (consumer.isLoading) {
           return Center(
             child: CircularProgressIndicator(
@@ -27,6 +31,8 @@ class ProfileScreen extends StatelessWidget {
             ),
           );
         }
+
+        // Display profile information once data is loaded
         return SizedBox(
           width: MediaQuery.sizeOf(context).width,
           height: MediaQuery.sizeOf(context).height,
@@ -34,6 +40,7 @@ class ProfileScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              // Profile avatar with circular border
               Container(
                 height: 150,
                 width: 150,
@@ -49,15 +56,18 @@ class ProfileScreen extends StatelessWidget {
                             .toString()
                             .startsWith('http')
                     ? ClipOval(
+                        // Display network image if avatar URL is valid
                         child: CachedNetworkImage(
                           imageUrl: consumer.userModel!.data!.avatar.toString(),
                           fit: BoxFit.cover,
                           width: 180,
                           height: 180,
+                          // Show loading indicator while image is loading
                           placeholder: (context, url) =>
                               CircularProgressIndicator(
                             color: Colors.black,
                           ),
+                          // Show fallback image if error occurs
                           errorWidget: (context, url, error) => Image.asset(
                             'assets/images/profile_boy.png',
                             fit: BoxFit.cover,
@@ -66,7 +76,8 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
                       )
-                    : Image.asset(
+                    : // Display default image if no valid avatar URL
+                    Image.asset(
                         'assets/images/profile_boy.png',
                         fit: BoxFit.cover,
                         width: 180,
@@ -74,6 +85,7 @@ class ProfileScreen extends StatelessWidget {
                       ),
               ),
               SizedBox(height: 10),
+              // User name with styled text
               RichText(
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -98,6 +110,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10),
+              // User email with subtle styling
               Text(
                 '${consumer.userModel?.data?.email}',
                 style: TextStyle(

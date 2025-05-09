@@ -3,9 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:usercraft/provider/home_screen_provider.dart';
-import 'package:usercraft/widgets/custom_widgets/custom_user_list.dart';
 import 'package:usercraft/widgets/custom_widgets/custom_sort_option.dart';
+import 'package:usercraft/widgets/custom_widgets/custom_user_list.dart';
 
+/// HomeScreen is the main screen of the application that displays a list of users.
+/// It provides search functionality, sorting options, and infinite scrolling.
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -14,14 +16,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  /// Controller for the search text field
   final TextEditingController _searchController = TextEditingController();
 
+  /// Focus node to manage keyboard focus for the search field
   final FocusNode _searchFocusNode = FocusNode();
+
+  /// Flag to control search bar visibility
   bool _isSearchVisible = false;
 
   @override
   void initState() {
     super.initState();
+    // Initialize scroll controller and add scroll listener for pagination
     final controller = Provider.of<HomeScreenProvider>(context, listen: false);
     controller.scrollController = ScrollController();
     controller.scrollController.addListener(_scrollListener);
@@ -29,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    // Clean up resources to prevent memory leaks
     final controller = Provider.of<HomeScreenProvider>(context, listen: false);
     controller.scrollController.removeListener(_scrollListener);
     controller.scrollController.dispose();
@@ -37,6 +45,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  /// Scroll listener for implementing infinite scrolling
+  /// Loads more data when user scrolls near the bottom of the list
   void _scrollListener() {
     final controller = Provider.of<HomeScreenProvider>(context, listen: false);
     if (controller.scrollController.position.pixels >=
@@ -50,6 +60,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  /// Toggles the visibility of the search bar
+  /// Clears search when hiding the search bar
   void _toggleSearch() {
     setState(() {
       _isSearchVisible = !_isSearchVisible;
@@ -62,6 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  /// Clears the search query and resets the search results
   void _clearSearch() {
     _searchController.clear();
     Provider.of<HomeScreenProvider>(context, listen: false).clearSearch();
@@ -81,12 +94,14 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         backgroundColor: Color(0XFFffd21f),
         actions: [
+          // Sort button to display sorting options
           IconButton(
             icon: Icon(Icons.sort, color: Colors.black),
             onPressed: () {
               customSortOptions(context);
             },
           ),
+          // Search toggle button
           IconButton(
             icon: Icon(
               _isSearchVisible ? Icons.close : Icons.search,
@@ -98,6 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Column(
         children: [
+          // Search bar - only visible when search is active
           if (_isSearchVisible)
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -146,6 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       onChanged: (value) {
                         setState(() {});
+                        // Filter users based on search query
                         Provider.of<HomeScreenProvider>(context, listen: false)
                             .filterUsers(value);
                       },
@@ -154,9 +171,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
+          // Main content area - displays user list or appropriate state UI
           Expanded(
             child: Consumer<HomeScreenProvider>(
               builder: (context, provider, child) {
+                // Display loading indicator while data is being fetched
                 if (provider.isLoading) {
                   return Center(
                     child: CircularProgressIndicator(
@@ -165,6 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
 
+                // Display error UI when there's an error
                 if (provider.hasError) {
                   return Center(
                     child: Column(
@@ -206,6 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
 
+                // Display fetch data button if no data has been fetched yet
                 if (!provider.isFetchData) {
                   return Center(
                     child: ElevatedButton(
@@ -225,9 +246,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
 
+                // Display search results when searching
                 if (provider.isSearching) {
                   return Column(
                     children: [
+                      // Search results count header
                       Container(
                         width: double.infinity,
                         padding:
@@ -241,6 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
+                      // No results found UI
                       if (provider.filteredUsers.isEmpty)
                         Expanded(
                           child: Center(
@@ -264,10 +288,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(height: 24),
                                 ElevatedButton.icon(
                                   onPressed: _clearSearch,
-                                  icon: Icon(
-                                    Icons.refresh,
-                                    color: Colors.black,
-                                  ),
+                                  icon: Icon(Icons.refresh),
                                   label: Text('Clear Search'),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Color(0XFFffd21f),
@@ -283,6 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         )
                       else
+                        // Display search results list
                         Expanded(
                           child: customUserList(provider, context),
                         ),
@@ -290,6 +312,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
 
+                // Display normal user list with pull-to-refresh
                 return RefreshIndicator(
                   onRefresh: provider.refreshData,
                   color: Color(0XFFffd21f),
